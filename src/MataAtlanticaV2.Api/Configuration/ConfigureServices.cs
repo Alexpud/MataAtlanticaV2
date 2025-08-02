@@ -22,6 +22,7 @@ public static class ConfigureServices
                 config.Headers = $"X-Seq-ApiKey={seqOptions.Key}";
             });
 
+            p.AddConsoleExporter();
             p.IncludeFormattedMessage = true;
             p.IncludeScopes = true;
         }));

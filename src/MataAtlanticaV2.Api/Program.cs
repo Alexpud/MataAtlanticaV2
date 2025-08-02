@@ -1,3 +1,4 @@
+using MataAtlanticaV2.Api.Apis;
 using MataAtlanticaV2.Apis;
 using MataAtlanticaV2.OpenTelemetry;
 
@@ -26,5 +27,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.AddWeatherForecastApi();
+app.AddUsuariosApi();
 
 app.Run();
