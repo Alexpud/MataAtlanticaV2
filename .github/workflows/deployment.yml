@@ -22,7 +22,7 @@ jobs:
     needs: test # Transforma a execucao dos jobs sequencial: test -> deploy
     steps:
       - name: Publishing
-        run: dotnet publish -c Release
+        run: dotnet publish src/MataAtlanticaV2.Api/MataAtlanticaV2.Api.csproj -c Release
       
       - name: Deploying
         run: echo 'Deploying ...'
