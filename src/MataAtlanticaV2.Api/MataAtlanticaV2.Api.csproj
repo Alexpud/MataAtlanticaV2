@@ -31,4 +31,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MataAtlanticaV2.Application\MataAtlanticaV2.Application.csproj" />
+    <ProjectReference Include="..\MataAtlanticaV2.Infrastructure\MataAtlanticaV2.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

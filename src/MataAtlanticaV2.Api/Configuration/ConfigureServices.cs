@@ -1,4 +1,7 @@
+using MataAtlanticaV2.Application.Produtos;
 using MataAtlanticaV2.Configuration;
+using MataAtlanticaV2.Domain.Repository;
+using MataAtlanticaV2.Infrastructure.Repositories;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -6,8 +9,12 @@ using OpenTelemetry.Trace;
 
 public static class ConfigureServices
 {
+    
     public static IServiceCollection AddOpenTelemetry(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IProdutoService, ProdutoService>();
+        services.AddScoped<IProdutoRepository, ProdutoRepository>();
+
         services.AddLogging(x => x.AddOpenTelemetry(p =>
         {
             p.SetResourceBuilder(ResourceBuilder.CreateEmpty()
