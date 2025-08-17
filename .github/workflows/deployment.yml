@@ -28,11 +28,12 @@ jobs:
         with:
           name: artifacts
           path: publish
+
   publish:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: download artifacts
+      - name: Download artifacts
         uses: actions/download-artifact
         with:
           name: artifacts
