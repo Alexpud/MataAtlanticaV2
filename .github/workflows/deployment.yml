@@ -58,6 +58,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          file: ./src/MataAtlantivaV2.API/Dockerfile
+          file: ./src/MataAtlanticaV2.API/Dockerfile
           push: true
           tags: spudin/mata-atlanticav2:${{ steps.extract_branch.outputs.branch }}
