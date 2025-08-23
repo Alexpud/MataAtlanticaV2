@@ -39,7 +39,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
 
       - name: Authorize Docker push
-        run: gcloud auth configure-docker southamerica-east1-docker.pkg.dev,gcr.io
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev,gcr.io
       # --- END: GCP Authentication Steps ---
 
       - name: Build and push to GCR
@@ -48,7 +48,7 @@ jobs:
           context: .
           file: src/MataAtlanticaV2.Api/Dockerfile
           push: true
-          tags: southamerica-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/mata-atlanticav2/${{ steps.extract_branch.outputs.branch }}:latest
+          tags: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/mata-atlanticav2/${{ steps.extract_branch.outputs.branch }}:latest
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
