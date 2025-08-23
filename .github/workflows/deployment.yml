@@ -21,7 +21,7 @@ jobs:
         run: dotnet test --no-build
 
       - name: Publishing
-        run: dotnet publish src/MataAtlanticaV2.Api/MataAtlanticaV2.Api.csproj -c Release -o src/MataAtlanticaV2.Api/MataAtlanticaV2.Api/publish
+        run: dotnet publish src/MataAtlanticaV2.Api/MataAtlanticaV2.Api.csproj -c Release -o src/MataAtlanticaV2.Api/publish
 
       - name: Extract branch name
         shell: bash
@@ -37,7 +37,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          file: ./src/MataAtlanticaV2.API/Dockerfile
+          file: src/MataAtlanticaV2.Api//Dockerfile
           push: true
           tags: spudin/mata-atlanticav2:${{ steps.extract_branch.outputs.branch }}
 
