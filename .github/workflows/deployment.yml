@@ -42,7 +42,7 @@ jobs:
           name: artifacts
 
       - name: list contents
-        run: echo "$VALOR"
+        run: ls
 
       - name: Extract branch name
         shell: bash
