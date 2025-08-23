@@ -39,7 +39,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
 
       - name: Authorize Docker push
-        run: gcloud auth configure-docker gcr.io,us.gcr.io,eu.gcr.io, southamerica-east1-docker.pkg.dev
+        run: gcloud auth configure-docker southamerica-east1-docker.pkg.dev,gcr.io
       # --- END: GCP Authentication Steps ---
 
       - name: Build and push to GCR
