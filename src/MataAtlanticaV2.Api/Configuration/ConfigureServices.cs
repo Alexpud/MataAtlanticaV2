@@ -9,11 +9,12 @@ using OpenTelemetry.Trace;
 
 public static class ConfigureServices
 {
-    
     public static IServiceCollection AddOpenTelemetry(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IProdutoService, ProdutoService>();
         services.AddScoped<IProdutoRepository, ProdutoRepository>();
+        
+        var otlpOptions = GetEnabledOtlpOptions(configuration);
 
         services.AddLogging(x => x.AddOpenTelemetry(p =>
         {
@@ -22,11 +23,9 @@ public static class ConfigureServices
 
             p.AddOtlpExporter(config =>
             {
-                var seqOptions = new OpenTelemetryExporterItem();
-                configuration.GetSection("OpenTelemetry:Exporter:Seq").Bind(seqOptions);
-                config.Endpoint = new Uri($"{seqOptions.Url}/ingest/otlp/v1/logs");
+                config.Endpoint = new Uri($"{otlpOptions.Url}/v1/logs");
                 config.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
-                config.Headers = $"X-Seq-ApiKey={seqOptions.Key}";
+                config.Headers = otlpOptions.Key;
             });
 
             p.AddConsoleExporter();
@@ -42,11 +41,9 @@ public static class ConfigureServices
                 tracing.AddSource(ServiceConstants.ApplicationName);
                 tracing.AddOtlpExporter(config =>
                 {
-                    var seqOptions = new OpenTelemetryExporterItem();
-                    configuration.GetSection("OpenTelemetry:Exporter:Seq").Bind(seqOptions);
-                    config.Endpoint = new Uri($"{seqOptions.Url}/ingest/otlp/v1/traces");
+                    config.Endpoint = new Uri($"{otlpOptions.Url}/v1/traces");
                     config.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
-                    config.Headers = $"X-Seq-ApiKey={seqOptions.Key}";
+                    config.Headers = otlpOptions.Key;
                 });
                 tracing.AddHttpClientInstrumentation();
                 tracing.AddConsoleExporter();
@@ -60,14 +57,24 @@ public static class ConfigureServices
                 metric.AddRuntimeInstrumentation();
                 metric.AddOtlpExporter(config =>
                 {
-                    var seqOptions = new OpenTelemetryExporterItem();
-                    configuration.GetSection("OpenTelemetry:Exporter:Seq").Bind(seqOptions);
-                    config.Endpoint = new Uri($"{seqOptions.Url}/ingest/otlp/v1/metrics");
+                    config.Endpoint = new Uri($"{otlpOptions.Url}");
                     config.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.HttpProtobuf;
-                    config.Headers = $"X-Seq-ApiKey={seqOptions.Key}";
+                    config.Headers = otlpOptions.Key;
                 });
             });
 
         return services;
+    }
+
+    private static OpenTelemetryExporterItem GetEnabledOtlpOptions(IConfiguration configuration)
+    {
+        var newRelicOtlOptions = new OpenTelemetryExporterItem();
+        configuration.GetSection("OpenTelemetry:Exporter:NewRelic").Bind(newRelicOtlOptions);
+
+        var seqOtlOptions = new OpenTelemetryExporterItem();
+        configuration.GetSection("OpenTelemetry:Exporter:Seq").Bind(seqOtlOptions);
+
+        var otlpOptions = newRelicOtlOptions.Enabled ? newRelicOtlOptions : seqOtlOptions;
+        return otlpOptions;
     }
 }
